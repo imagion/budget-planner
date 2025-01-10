@@ -1,3 +1,9 @@
+import TransactionForm from '@/components/TransactionForm';
+
 export default function Home() {
-  return <h1 className='text-xl md:text-2xl'>Home Page</h1>;
+  return (
+    <main className='mx-auto max-w-md rounded bg-white p-4 shadow'>
+      <TransactionForm />
+    </main>
+  );
 }
