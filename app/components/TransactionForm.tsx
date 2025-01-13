@@ -1,20 +1,64 @@
 'use client';
 
 import { useState } from 'react';
+import { useFirestore } from '@/hooks/useFirestore';
+import { FieldValue, serverTimestamp } from 'firebase/firestore';
+
+type TransactionType = {
+  title: string;
+  amount: number;
+  type: 'income' | 'expense';
+  createdAt: FieldValue;
+};
 
 export default function TransactionForm() {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
   const [type, setType] = useState<'income' | 'expense'>('expense');
+  const [error, setError] = useState<string | null>(null);
 
+  const { addDocument, response } = useFirestore('transactions');
+
+  const validateForm = () => {
+    if (!title.trim()) return 'Название не может быть пустым.';
+    if (!amount || isNaN(Number(amount)) || Number(amount) <= 0)
+      return 'Сумма должна быть положительным числом.';
+    return null;
+  };
+
+  // TODO: check document after server response
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
 
-    console.log(title, amount, type);
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    const transaction: TransactionType = {
+      title,
+      amount: parseFloat(amount),
+      type,
+      createdAt: serverTimestamp(),
+    };
+
+    await addDocument({ transaction });
+
+    // Reset the form after successful addition
+    if (response.success) {
+      setTitle('');
+      setAmount('');
+      setType('expense');
+    } else {
+      setError(response.error || 'Произошла ошибка при добавлении транзакции.');
+    }
   };
 
   return (
     <form className='mb-4' onSubmit={handleSubmit}>
+      {error && <p className='mb-2 text-red-500'>{error}</p>}
       <input
         type='text'
         placeholder='Название'
@@ -36,11 +80,20 @@ export default function TransactionForm() {
         <option value='expense'>Расход</option>
         <option value='income'>Доход</option>
       </select>
-      <button
-        type='submit'
-        className='w-full rounded bg-accent p-2 text-foreground hover:bg-blue-600'>
-        Добавить транзакцию
-      </button>
+      {response.isPending ? (
+        <button
+          type='submit'
+          className='w-full rounded bg-accent p-2 text-foreground hover:bg-neutral-600'
+          disabled>
+          Добавление...
+        </button>
+      ) : (
+        <button
+          type='submit'
+          className='w-full rounded bg-accent p-2 text-foreground hover:bg-blue-600'>
+          Добавить транзакцию
+        </button>
+      )}
     </form>
   );
 }

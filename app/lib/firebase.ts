@@ -11,10 +11,10 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// init firebase
+// Initialize  Firebase
 const app = initializeApp(firebaseConfig);
 
-// init services
+// Initialize Services
 const db = getFirestore(app);
 const auth = getAuth(app);
 

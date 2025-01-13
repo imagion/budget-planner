@@ -2,19 +2,18 @@
   "name": "budget-planner",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
-    "emulator": "firebase emulators:start",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "clsx": "^2.1.1",
     "firebase": "^11.1.0",
-    "firebase-admin": "^13.0.2",
     "next": "15.1.4",
     "react": "19.0.0",
     "react-dom": "19.0.0",
