@@ -125,8 +125,6 @@ export const useFirestore = <T>(collectionName: string) => {
     }
   };
 
-  console.log('🚀 -> response:', response);
-
   // Cleanup function to prevent unnecessary dispatches if the component unmounts
   useEffect(() => {
     return () => setIsCancelled(true);
