@@ -3,15 +3,36 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #fafafa;
   --foreground: #171717;
   --accent: #3b82f6;
+  --component: #ffffff;
+}
+
+/* hide arrows from input fields */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #171717;
+    --foreground: #e5e5e5;
     --accent: #1d4ed8;
+    --component: #262626;
   }
+  
+  input, textarea {
+    background-color : #404040;
+    border-color: #525252;
+  }
+  
+  input::placeholder, textarea::placeholder {
+    color: #d4d4d4;
+  } 
 }

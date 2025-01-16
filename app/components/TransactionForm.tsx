@@ -57,7 +57,9 @@ export default function TransactionForm() {
   };
 
   return (
-    <form className='mb-4' onSubmit={handleSubmit}>
+    <form
+      className='bg-component mb-4 w-full max-w-md rounded p-6 shadow-md'
+      onSubmit={handleSubmit}>
       {error && <p className='mb-2 text-red-500'>{error}</p>}
       <input
         type='text'
@@ -76,7 +78,7 @@ export default function TransactionForm() {
       <select
         value={type}
         onChange={(e) => setType(e.target.value as 'income' | 'expense')}
-        className='mb-2 w-full rounded border p-2'>
+        className='mb-2 w-full rounded border bg-white p-2 dark:border-neutral-600 dark:bg-neutral-700'>
         <option value='expense'>Расход</option>
         <option value='income'>Доход</option>
       </select>

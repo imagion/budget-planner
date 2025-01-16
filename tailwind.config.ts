@@ -12,6 +12,7 @@ export default {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
         accent: 'var(--accent)',
+        component: 'var(--component)',
       },
     },
   },

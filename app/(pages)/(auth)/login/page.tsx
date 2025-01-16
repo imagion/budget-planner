@@ -30,7 +30,7 @@ export default function Login() {
     <>
       <form
         onSubmit={handleLogin}
-        className='w-full max-w-md rounded bg-white p-6 shadow-md'>
+        className='bg-component w-full max-w-md rounded p-6 shadow-md'>
         <h2 className='mb-4 text-2xl font-bold'>Вход</h2>
         <input
           type='email'
@@ -62,7 +62,7 @@ export default function Login() {
         </button>
         {error && <p className='mt-2 text-red-500'>{error}</p>}
       </form>
-      <div className='mt-4 w-full max-w-md rounded bg-white p-6 text-center text-sm shadow-md'>
+      <div className='bg-component mt-4 w-full max-w-md rounded p-6 text-center text-sm shadow-md'>
         Ещё нет аккаунта?{' '}
         <Link href='/signup' className='text-blue-500 hover:underline'>
           Зарегистрируйтесь
