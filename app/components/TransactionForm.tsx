@@ -2,13 +2,11 @@
 
 import { useState } from 'react';
 import { useFirestore } from '@/hooks/useFirestore';
-import { FieldValue, serverTimestamp } from 'firebase/firestore';
 
 type TransactionType = {
   title: string;
   amount: number;
   type: 'income' | 'expense';
-  createdAt: FieldValue;
 };
 
 export default function TransactionForm() {
@@ -37,14 +35,11 @@ export default function TransactionForm() {
       return;
     }
 
-    const transaction: TransactionType = {
+    await addDocument({
       title,
       amount: parseFloat(amount),
       type,
-      createdAt: serverTimestamp(),
-    };
-
-    await addDocument({ transaction });
+    } as TransactionType);
 
     // Reset the form after successful addition
     if (response.success) {
@@ -58,7 +53,7 @@ export default function TransactionForm() {
 
   return (
     <form
-      className='bg-component mb-4 w-full max-w-md rounded p-6 shadow-md'
+      className='mb-4 w-full max-w-md rounded bg-component p-6 shadow-md'
       onSubmit={handleSubmit}>
       {error && <p className='mb-2 text-red-500'>{error}</p>}
       <input
