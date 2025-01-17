@@ -8,20 +8,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-
-type StateType<T> = {
-  isPending: boolean;
-  document: T | null;
-  error: string | null;
-  success: boolean;
-};
-
-type ActionType<T> =
-  | { type: 'IS_PENDING' }
-  | { type: 'ADDED_DOCUMENT'; payload: T }
-  | { type: 'DELETED_DOCUMENT' }
-  | { type: 'UPDATED_DOCUMENT'; payload: T }
-  | { type: 'ERROR'; payload: string };
+import { ActionType, StateType } from '@/types/useFirestoreTypes';
 
 const initialState = <T>(): StateType<T> => ({
   isPending: false,
