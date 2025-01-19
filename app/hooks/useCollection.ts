@@ -1,52 +1,73 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   collection,
+  onSnapshot,
+  orderBy,
   query,
-  getDocs,
   QueryConstraint,
+  where,
+  WhereFilterOp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
+type QueryCondition = [string, WhereFilterOp, unknown];
+type OrderByCondition = [string, 'asc' | 'desc'];
+
+interface UseCollectionReturn<T> {
+  data: T[] | null;
+  error: string | null;
+  isLoading: boolean;
+}
+
 export function useCollection<T>(
   collectionName: string,
-  where?: QueryConstraint,
-  orderBy?: QueryConstraint,
-) {
+  _where?: QueryCondition,
+  _orderBy?: OrderByCondition,
+): UseCollectionReturn<T> {
   const [data, setData] = useState<T[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // Мемоизация constraints для повышения производительности.
+  // Применение JSON.stringify в массиве зависимостей обеспечивает
+  //  правильное сравнение объектов (они сравниваются по значению, а не по ссылке).
+  const constraints = useMemo(() => {
+    const constraints: QueryConstraint[] = [];
+    if (_where) constraints.push(where(..._where));
+    if (_orderBy) constraints.push(orderBy(..._orderBy));
+    return constraints;
+  }, [
+    _where ? JSON.stringify(_where) : null,
+    _orderBy ? JSON.stringify(_orderBy) : null,
+  ]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const colRef = collection(db, collectionName);
+    const collectionRef = collection(db, collectionName);
+    const q = constraints.length
+      ? query(collectionRef, ...constraints)
+      : collectionRef;
 
-        // Собираем запрос с учетом фильтрации и сортировки
-        const q = query(
-          colRef,
-          ...(where ? [where] : []),
-          ...(orderBy ? [orderBy] : []),
-        );
-
-        const querySnapshot = await getDocs(q);
-        const items: T[] = querySnapshot.docs.map(
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const results = snapshot.docs.map(
           (doc) => ({ id: doc.id, ...doc.data() }) as T,
         );
-
-        setData(items);
-      } catch (err) {
-        setError((err as Error).message);
-        console.log((err as Error).message);
-      } finally {
+        setData(results);
+        setError(null);
         setIsLoading(false);
-      }
-    };
+      },
+      (error) => {
+        console.error('Error fetching collection:', error);
+        setError('Could not fetch the data');
+        setIsLoading(false);
+      },
+    );
 
-    fetchData();
-  }, [collectionName, where, orderBy]);
+    return () => unsubscribe();
+  }, [collectionName, constraints]);
 
   return { data, error, isLoading };
 }

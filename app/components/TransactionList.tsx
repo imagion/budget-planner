@@ -1,8 +1,6 @@
 'use client';
 
 import { useCollection } from '@/hooks/useCollection';
-import { orderBy } from 'firebase/firestore';
-import { useMemo } from 'react';
 
 interface Document {
   id: string;
@@ -12,12 +10,10 @@ interface Document {
 }
 
 export default function TransactionList() {
-  const memoizedOrderBy = useMemo(() => orderBy('createdAt', 'asc'), []);
-
   const { data, error, isLoading } = useCollection<Document>(
     'transactions',
     undefined,
-    memoizedOrderBy,
+    ['createdAt', 'asc'],
   );
 
   if (isLoading) return <p>Загрузка данных...</p>;
