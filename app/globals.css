@@ -7,6 +7,10 @@
   --foreground: #171717;
   --accent: #3b82f6;
   --component: #ffffff;
+  --expense-bg: #fee2e2;
+  --expense-text: #7f1d1d;
+  --income-bg: #dcfce7 ;
+  --income-text: #14532d ;  
 }
 
 /* hide arrows from input fields */
@@ -25,6 +29,10 @@ input[type=number] {
     --foreground: #e5e5e5;
     --accent: #1d4ed8;
     --component: #262626;
+    --expense-bg: #991b1b;
+    --expense-text: #fee2e2;
+    --income-bg: #166534;
+    --income-text: #dcfce7;
   }
   
   input, textarea {
