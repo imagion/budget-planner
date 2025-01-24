@@ -47,19 +47,20 @@ export default function TransactionList() {
   console.log(data);
 
   return (
-    <div className='w-full max-w-md p-4 lg:w-1/2'>
-      <h1 className='text-2xl font-bold'>Список транзакций</h1>
-      <div className='space-y-4'>
+    <div className='mx-auto w-full max-w-md p-4 md:ml-auto'>
+      <h2 className='text-2xl font-bold'>Список транзакций</h2>
+      <div className='mt-4 space-y-2'>
         {data?.map((doc) => (
           <div
             key={doc.id}
-            className={`flex flex-col rounded-lg p-4 shadow-md ${
+            className={cn(
+              'flex flex-col content-center rounded p-4 shadow-md',
               doc.type === 'income'
-                ? 'bg-green-100 text-green-900 dark:bg-green-800 dark:text-green-100'
-                : 'bg-red-100 text-red-900 dark:bg-red-800 dark:text-red-100'
-            }`}>
+                ? 'bg-green-100 text-green-900 dark:bg-green-800/40 dark:text-green-100'
+                : 'bg-red-100 text-red-900 dark:bg-red-800/40 dark:text-red-100',
+            )}>
             {editingId === doc.id ? (
-              <div>
+              <div className='space-y-2'>
                 <input
                   type='text'
                   value={formData.title || ''}
@@ -67,7 +68,7 @@ export default function TransactionList() {
                     setFormData({ ...formData, title: e.target.value })
                   }
                   placeholder='Название'
-                  className='mb-2 w-full rounded p-2'
+                  className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'
                 />
                 <input
                   type='number'
@@ -79,7 +80,7 @@ export default function TransactionList() {
                     })
                   }
                   placeholder='Сумма'
-                  className='mb-2 w-full rounded p-2'
+                  className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'
                 />
                 <select
                   value={formData.type || ''}
@@ -89,7 +90,7 @@ export default function TransactionList() {
                       type: e.target.value as 'income' | 'expense',
                     })
                   }
-                  className='mb-2 w-full rounded p-2'>
+                  className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'>
                   <option value='income'>Доход</option>
                   <option value='expense'>Расход</option>
                 </select>
@@ -109,19 +110,37 @@ export default function TransactionList() {
                 <div>
                   <p className='font-medium'>{doc.title}</p>
                   <p className='font-medium'>
-                    {doc.type === 'income' ? '+' : '-'}${doc.amount}
+                    {doc.type === 'income' ? '+' : '-'}
+                    {doc.amount}₽
                   </p>
                 </div>
                 <div className='flex gap-2'>
                   <button
                     onClick={() => handleEdit(doc.id, doc)}
-                    className='rounded bg-yellow-500 px-4 py-2 text-white hover:bg-yellow-700'>
-                    Редактировать
+                    className='flex items-center justify-center p-2'>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      viewBox='0 0 24 24'
+                      fill='currentColor'
+                      className='size-6 text-yellow-600 hover:text-yellow-800'>
+                      <path d='M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z' />
+                    </svg>
                   </button>
+
                   <button
                     onClick={() => handleDelete(doc.id)}
-                    className='rounded bg-red-500 px-4 py-2 text-white hover:bg-red-700'>
-                    Удалить
+                    className='flex items-center justify-center p-2'>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      viewBox='0 0 24 24'
+                      fill='currentColor'
+                      className='size-6 text-red-500 hover:text-red-700'>
+                      <path
+                        fillRule='evenodd'
+                        d='M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z'
+                        clipRule='evenodd'
+                      />
+                    </svg>
                   </button>
                 </div>
               </div>

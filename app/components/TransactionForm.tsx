@@ -52,45 +52,48 @@ export default function TransactionForm() {
   };
 
   return (
-    <form
-      className='mb-4 w-full max-w-md rounded bg-component p-6 shadow-md'
-      onSubmit={handleSubmit}>
-      {error && <p className='mb-2 text-red-500'>{error}</p>}
-      <input
-        type='text'
-        placeholder='Название'
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className='mb-2 w-full rounded border p-2'
-      />
-      <input
-        type='number'
-        placeholder='Сумма'
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        className='mb-2 w-full rounded border p-2'
-      />
-      <select
-        value={type}
-        onChange={(e) => setType(e.target.value as 'income' | 'expense')}
-        className='mb-2 w-full rounded border bg-white p-2 dark:border-neutral-600 dark:bg-neutral-700'>
-        <option value='expense'>Расход</option>
-        <option value='income'>Доход</option>
-      </select>
-      {response.isPending ? (
-        <button
-          type='submit'
-          className='w-full rounded bg-accent p-2 text-foreground hover:bg-neutral-600'
-          disabled>
-          Добавление...
-        </button>
-      ) : (
-        <button
-          type='submit'
-          className='w-full rounded bg-accent p-2 text-foreground hover:bg-blue-600'>
-          Добавить транзакцию
-        </button>
-      )}
-    </form>
+    <div className='mx-auto w-full max-w-md p-4 md:mr-auto'>
+      <h2 className='text-2xl font-bold'>Новая транзакция</h2>
+      <form
+        className='mt-4 w-full max-w-md space-y-2 rounded bg-white p-6 shadow-md dark:bg-neutral-800'
+        onSubmit={handleSubmit}>
+        {error && <p className='text-red-500'>{error}</p>}
+        <input
+          type='text'
+          placeholder='Название'
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'
+        />
+        <input
+          type='number'
+          placeholder='Сумма'
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'
+        />
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value as 'income' | 'expense')}
+          className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'>
+          <option value='expense'>Расход</option>
+          <option value='income'>Доход</option>
+        </select>
+        {response.isPending ? (
+          <button
+            type='submit'
+            className='w-full rounded bg-accent p-2 text-foreground hover:bg-neutral-600'
+            disabled>
+            Добавление...
+          </button>
+        ) : (
+          <button
+            type='submit'
+            className='w-full rounded bg-accent p-2 text-white hover:bg-blue-600'>
+            Добавить транзакцию
+          </button>
+        )}
+      </form>
+    </div>
   );
 }

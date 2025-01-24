@@ -6,6 +6,7 @@ const config = {
   bracketSameLine: true,
   singleQuote: true,
   jsxSingleQuote: true,
+  bracketSameLine: true,
   plugins: ['prettier-plugin-tailwindcss'],
 };
 

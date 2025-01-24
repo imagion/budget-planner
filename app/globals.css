@@ -6,11 +6,6 @@
   --background: #fafafa;
   --foreground: #171717;
   --accent: #3b82f6;
-  --component: #ffffff;
-  --expense-bg: #fee2e2;
-  --expense-text: #7f1d1d;
-  --income-bg: #dcfce7 ;
-  --income-text: #14532d ;  
 }
 
 /* hide arrows from input fields */
@@ -19,8 +14,14 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
+}
+
+input,
+textarea,
+select {
+  @apply border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -28,19 +29,5 @@ input[type=number] {
     --background: #171717;
     --foreground: #e5e5e5;
     --accent: #1d4ed8;
-    --component: #262626;
-    --expense-bg: #991b1b;
-    --expense-text: #fee2e2;
-    --income-bg: #166534;
-    --income-text: #dcfce7;
   }
-  
-  input, textarea {
-    background-color : #404040;
-    border-color: #525252;
-  }
-  
-  input::placeholder, textarea::placeholder {
-    color: #d4d4d4;
-  } 
 }
