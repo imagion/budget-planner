@@ -52,7 +52,7 @@ export default function TransactionForm() {
   };
 
   return (
-    <div className='mx-auto w-full max-w-md p-4 md:mr-auto'>
+    <div className='mx-auto w-full max-w-md p-4'>
       <h2 className='text-2xl font-bold'>Новая транзакция</h2>
       <form
         className='mt-4 w-full max-w-md space-y-2 rounded bg-white p-6 shadow-md dark:bg-neutral-800'

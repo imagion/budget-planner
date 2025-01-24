@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <ProtectedRoute>
       <Header />
-      <main className='container mx-auto mt-4 md:grid md:grid-cols-[auto_auto] md:justify-center'>
+      <main className='container mx-auto mt-4 md:grid md:grid-cols-[minmax(0,_1fr)_minmax(0,_1fr)] md:justify-center'>
         <TransactionList />
         <TransactionForm />
       </main>
