@@ -1,14 +1,11 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { ChildrenProps } from '@/types/general';
 
-interface PublicRouteProps {
-  children: ReactNode;
-}
-
-export default function PublicRoute({ children }: PublicRouteProps) {
+export default function PublicRoute({ children }: ChildrenProps) {
   const { user, isPending } = useAuth();
   const router = useRouter();
 

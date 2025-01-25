@@ -8,18 +8,13 @@ import {
   query,
   QueryConstraint,
   where,
-  WhereFilterOp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-
-type QueryCondition = [string, WhereFilterOp, unknown];
-type OrderByCondition = [string, 'asc' | 'desc'];
-
-interface UseCollectionReturn<T> {
-  data: T[] | null;
-  error: string | null;
-  isLoading: boolean;
-}
+import {
+  OrderByCondition,
+  QueryCondition,
+  UseCollectionReturn,
+} from '@/types/useCollectionTypes';
 
 export function useCollection<T>(
   collectionName: string,

@@ -6,15 +6,7 @@ import { useFirestore } from '@/hooks/useFirestore';
 import { cn } from '@/lib/utils';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Timestamp } from 'firebase/firestore';
-
-interface Document {
-  id: string;
-  title: string;
-  amount: number;
-  type: 'expense' | 'income';
-  createdAt: Timestamp;
-}
+import { Document } from '@/types/TransactionListTypes';
 
 export default function TransactionList() {
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -22,6 +14,9 @@ export default function TransactionList() {
   const [filterType, setFilterType] = useState<'all' | 'income' | 'expense'>(
     'all',
   );
+  const [filterType1, setFilterType1] = useState<
+    undefined | 'income' | 'expense'
+  >(undefined);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 

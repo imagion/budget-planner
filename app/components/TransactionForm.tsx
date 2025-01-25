@@ -2,12 +2,7 @@
 
 import { useState } from 'react';
 import { useFirestore } from '@/hooks/useFirestore';
-
-type TransactionType = {
-  title: string;
-  amount: number;
-  type: 'income' | 'expense';
-};
+import { TransactionType } from '@/types/TransactionFormTypes';
 
 export default function TransactionForm() {
   const [title, setTitle] = useState('');
