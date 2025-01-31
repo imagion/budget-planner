@@ -1,24 +1,14 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useCollection } from '@/hooks/useCollection';
 import { useFirestore } from '@/hooks/useFirestore';
 import { cn } from '@/lib/utils';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { Document } from '@/types/TransactionListTypes';
+import { Document } from '@/types/TransactionsListTypes';
 
-export default function TransactionList() {
+export default function TransactionsList() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Partial<Document>>({});
-  const [filterType, setFilterType] = useState<'all' | 'income' | 'expense'>(
-    'all',
-  );
-  const [filterType1, setFilterType1] = useState<
-    undefined | 'income' | 'expense'
-  >(undefined);
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
 
   const { data, error, isLoading } = useCollection<Document>(
     'transactions',
@@ -45,63 +35,16 @@ export default function TransactionList() {
     await deleteDocument(id);
   };
 
-  const filteredData: Document[] | null = useMemo(() => {
-    if (!data) return null;
-    let result = data;
-    if (filterType !== 'all') {
-      result = result?.filter((doc) => doc.type === filterType);
-    }
-    if (startDate) {
-      result = result?.filter((doc) => {
-        const docDate = new Date(doc.createdAt.seconds * 1000);
-        return docDate >= startDate!;
-      });
-    }
-    if (endDate) {
-      result = result?.filter((doc) => {
-        const docDate = new Date(doc.createdAt.seconds * 1000);
-        return docDate <= endDate!;
-      });
-    }
-    return result;
-  }, [filterType, startDate, endDate, data]);
-
   if (isLoading) return <p>Загрузка данных...</p>;
   if (error) return <p>Ошибка: {error}</p>;
 
-  console.log('filteredData:', filteredData);
+  console.log(data);
 
   return (
-    <div className='mx-auto w-full max-w-md p-4'>
+    <div className='mx-auto w-full max-w-md p-4 md:ml-auto'>
       <h2 className='text-2xl font-bold'>Список транзакций</h2>
-      <div>
-        <select
-          value={filterType}
-          onChange={(e) =>
-            setFilterType(e.target.value as 'all' | 'income' | 'expense')
-          }
-          className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'>
-          <option value='all'>Все</option>
-          <option value='expense'>Расход</option>
-          <option value='income'>Доход</option>
-        </select>
-        <div className='flex gap-2'>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            placeholderText='Начальная дата'
-            className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'
-          />
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            placeholderText='Конечная дата'
-            className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'
-          />
-        </div>
-      </div>
       <div className='mt-4 space-y-2'>
-        {filteredData?.map((doc) => (
+        {data?.map((doc) => (
           <div
             key={doc.id}
             className={cn(
@@ -177,6 +120,7 @@ export default function TransactionList() {
                       <path d='M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z' />
                     </svg>
                   </button>
+
                   <button
                     onClick={() => handleDelete(doc.id)}
                     className='flex items-center justify-center p-2'>

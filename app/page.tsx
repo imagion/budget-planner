@@ -1,7 +1,7 @@
 import Header from '@/components/Header';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import TransactionForm from '@/components/TransactionForm';
-import TransactionList from '@/components/TransactionList';
+import TransactionList from '@/components/TransactionsList';
 
 export default function Home() {
   return (

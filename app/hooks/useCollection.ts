@@ -18,7 +18,7 @@ import {
 
 export function useCollection<T>(
   collectionName: string,
-  _where?: QueryCondition,
+  _where?: QueryCondition[],
   _orderBy?: OrderByCondition,
 ): UseCollectionReturn<T> {
   const [data, setData] = useState<T[] | null>(null);
@@ -30,7 +30,9 @@ export function useCollection<T>(
   //  правильное сравнение объектов (они сравниваются по значению, а не по ссылке).
   const constraints = useMemo(() => {
     const constraints: QueryConstraint[] = [];
-    if (_where) constraints.push(where(..._where));
+    if (_where && _where.length > 0) {
+      _where.forEach((condition) => constraints.push(where(...condition)));
+    }
     if (_orderBy) constraints.push(orderBy(..._orderBy));
     return constraints;
   }, [
