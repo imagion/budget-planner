@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useCollection } from '@/hooks/useCollection';
 import { useFirestore } from '@/hooks/useFirestore';
 import { cn } from '@/lib/utils';
@@ -9,12 +9,21 @@ import { Document } from '@/types/TransactionsListTypes';
 export default function TransactionsList() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Partial<Document>>({});
+  const [filterType, setFilterType] = useState<'all' | 'income' | 'expense'>(
+    'all',
+  );
 
   const { data, error, isLoading } = useCollection<Document>(
     'transactions',
     undefined,
     ['createdAt', 'asc'],
   );
+
+  const filteredData = useMemo(() => {
+    if (filterType === 'all') return data;
+    return data?.filter((doc) => doc.type === filterType);
+  }, [filterType, data]);
+
   const { updateDocument, deleteDocument } =
     useFirestore<Document>('transactions');
 
@@ -43,8 +52,20 @@ export default function TransactionsList() {
   return (
     <div className='mx-auto w-full max-w-md p-4 md:ml-auto'>
       <h2 className='text-2xl font-bold'>Список транзакций</h2>
+      <div>
+        <select
+          value={filterType}
+          onChange={(e) =>
+            setFilterType(e.target.value as 'all' | 'income' | 'expense')
+          }
+          className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'>
+          <option value='all'>Все</option>
+          <option value='income'>Доход</option>
+          <option value='expense'>Расход</option>
+        </select>
+      </div>
       <div className='mt-4 space-y-2'>
-        {data?.map((doc) => (
+        {filteredData?.map((doc) => (
           <div
             key={doc.id}
             className={cn(
