@@ -93,7 +93,7 @@ export default function TransactionsList() {
     <div className='mx-auto w-full max-w-md p-4 md:ml-auto'>
       <h2 className='text-2xl font-bold'>Список транзакций</h2>
       {/* Фильтры */}
-      <div className='mb-4 space-y-2'>
+      <div className='mt-4 '>
         {/* Фильтр по типу */}
         <select
           value={filterType}
@@ -116,7 +116,7 @@ export default function TransactionsList() {
               : 'Выбрать диапазон дат'}
           </button>
           {showDatePicker && (
-            <div className='absolute z-10 mt-2 rounded border bg-white p-2 shadow-lg dark:bg-neutral-800'>
+            <div className='mt-2 grid justify-center rounded  bg-white p-2 shadow-lg dark:bg-neutral-800'>
               <DateRange
                 editableDateInputs={true}
                 onChange={(ranges: RangeKeyDict) => {
@@ -138,7 +138,7 @@ export default function TransactionsList() {
               />
               <button
                 onClick={() => setShowDatePicker(false)}
-                className='mt-2 w-full rounded bg-accent p-2 text-white hover:bg-accent-dark'>
+                className='w-full rounded bg-accent p-2 text-white hover:bg-blue-600'>
                 Применить
               </button>
             </div>
@@ -146,12 +146,12 @@ export default function TransactionsList() {
         </div>
       </div>
       {/* Список транзакций */}
-      <div className='mt-4 space-y-2'>
+      <div className='mt-4'>
         {filteredData?.map((doc) => (
           <div
             key={doc.id}
             className={cn(
-              'flex flex-col content-center rounded p-4 shadow-md',
+              'flex flex-col content-center rounded p-2 shadow-md',
               doc.type === 'income'
                 ? 'bg-green-100 text-green-900 dark:bg-green-800/40 dark:text-green-100'
                 : 'bg-red-100 text-red-900 dark:bg-red-800/40 dark:text-red-100',

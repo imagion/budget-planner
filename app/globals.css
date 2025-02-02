@@ -24,6 +24,44 @@ select {
   @apply border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700;
 }
 
+/* calendar styles */
+.rdrCalendarWrapper {
+  @apply dark:!bg-neutral-800 border dark:!border-neutral-600 rounded;
+}
+.rdrDateDisplayWrapper {
+  @apply dark:!bg-neutral-700
+}
+.rdrDateDisplayItem {
+  @apply dark:!shadow-md dark:!bg-neutral-800
+}
+.rdrNextPrevButton {
+  @apply dark:!bg-neutral-700
+}
+.rdrPprevButton i {
+  @apply dark:!border-r-neutral-200
+}
+.rdrNextButton i {
+  @apply dark:!border-l-neutral-200
+}
+.rdrMonthPicker, .rdrYearPicker {
+  select {
+    @apply dark:!text-neutral-200 dark:!bg-neutral-700
+  }
+}
+.rdrWeekDay {
+  @apply dark:!text-neutral-400
+}
+.rdrDayNumber span {
+  @apply dark:!text-gray-200;
+}
+.rdrDayPassive .rdrDayNumber span {
+  @apply dark:!text-gray-500;
+}
+
+.rdrSelected, .rdrInRange, .rdrStartEdge, .rdrEndEdge {
+  @apply dark:!bg-accent dark:!text-white;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #171717;
