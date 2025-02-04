@@ -6,8 +6,9 @@ import { useCollection } from '@/hooks/useCollection';
 import { useFirestore } from '@/hooks/useFirestore';
 import { cn } from '@/lib/utils';
 import { DateRange, RangeKeyDict } from 'react-date-range';
-import 'react-date-range/dist/styles.css';
-import 'react-date-range/dist/theme/default.css';
+// import 'react-date-range/dist/styles.css';
+// import 'react-date-range/dist/theme/default.css';
+import { ru } from 'date-fns/locale';
 import { Document } from '@/types/TransactionsListTypes';
 
 export default function TransactionsList() {
@@ -93,14 +94,14 @@ export default function TransactionsList() {
     <div className='mx-auto w-full max-w-md p-4 md:ml-auto'>
       <h2 className='text-2xl font-bold'>Список транзакций</h2>
       {/* Фильтры */}
-      <div className='mt-4 '>
+      <div className='mt-4'>
         {/* Фильтр по типу */}
         <select
           value={filterType}
           onChange={(e) =>
             setFilterType(e.target.value as 'all' | 'income' | 'expense')
           }
-          className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'>
+          className='focus:ring-accent w-full rounded-sm border bg-white p-2 placeholder-neutral-300 focus:ring-2 focus:outline-hidden dark:border-neutral-600 dark:bg-neutral-700'>
           <option value='all'>Все</option>
           <option value='income'>Доход</option>
           <option value='expense'>Расход</option>
@@ -110,13 +111,13 @@ export default function TransactionsList() {
         <div className='relative'>
           <button
             onClick={() => setShowDatePicker((prev) => !prev)}
-            className='w-full rounded border bg-white p-2 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'>
+            className='focus:ring-accent w-full rounded-sm border bg-white p-2 focus:ring-2 focus:outline-hidden dark:border-neutral-600 dark:bg-neutral-700'>
             {dateRange.startDate && dateRange.endDate
               ? `${dateRange.startDate.toLocaleDateString()} - ${dateRange.endDate.toLocaleDateString()}`
               : 'Выбрать диапазон дат'}
           </button>
           {showDatePicker && (
-            <div className='mt-2 grid justify-center rounded  bg-white p-2 shadow-lg dark:bg-neutral-800'>
+            <div className='mt-2 grid justify-center rounded-sm bg-white p-2 shadow-lg dark:bg-neutral-800'>
               <DateRange
                 editableDateInputs={true}
                 onChange={(ranges: RangeKeyDict) => {
@@ -127,6 +128,9 @@ export default function TransactionsList() {
                     endDate: endDate || null,
                   });
                 }}
+                locale={ru}
+                dateDisplayFormat='dd.MM.yyyy'
+                weekStartsOn={1}
                 moveRangeOnFirstSelection={false}
                 ranges={[
                   {
@@ -138,7 +142,7 @@ export default function TransactionsList() {
               />
               <button
                 onClick={() => setShowDatePicker(false)}
-                className='w-full rounded bg-accent p-2 text-white hover:bg-blue-600'>
+                className='bg-accent w-full rounded-sm p-2 text-white hover:bg-blue-600'>
                 Применить
               </button>
             </div>
@@ -151,7 +155,7 @@ export default function TransactionsList() {
           <div
             key={doc.id}
             className={cn(
-              'flex flex-col content-center rounded p-2 shadow-md',
+              'flex flex-col content-center rounded-sm p-2 shadow-md',
               doc.type === 'income'
                 ? 'bg-green-100 text-green-900 dark:bg-green-800/40 dark:text-green-100'
                 : 'bg-red-100 text-red-900 dark:bg-red-800/40 dark:text-red-100',
@@ -166,7 +170,7 @@ export default function TransactionsList() {
                     setFormData({ ...formData, title: e.target.value })
                   }
                   placeholder='Название'
-                  className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'
+                  className='focus:ring-accent w-full rounded-sm border bg-white p-2 placeholder-neutral-300 focus:ring-2 focus:outline-hidden dark:border-neutral-600 dark:bg-neutral-700'
                 />
                 <input
                   type='number'
@@ -178,7 +182,7 @@ export default function TransactionsList() {
                     })
                   }
                   placeholder='Сумма'
-                  className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'
+                  className='focus:ring-accent w-full rounded-sm border bg-white p-2 placeholder-neutral-300 focus:ring-2 focus:outline-hidden dark:border-neutral-600 dark:bg-neutral-700'
                 />
                 <select
                   value={formData.type || ''}
@@ -188,18 +192,18 @@ export default function TransactionsList() {
                       type: e.target.value as 'income' | 'expense',
                     })
                   }
-                  className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'>
+                  className='focus:ring-accent w-full rounded-sm border bg-white p-2 placeholder-neutral-300 focus:ring-2 focus:outline-hidden dark:border-neutral-600 dark:bg-neutral-700'>
                   <option value='income'>Доход</option>
                   <option value='expense'>Расход</option>
                 </select>
                 <button
                   onClick={handleSave}
-                  className='mr-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700'>
+                  className='mr-2 rounded-sm bg-blue-500 px-4 py-2 text-white hover:bg-blue-700'>
                   Сохранить
                 </button>
                 <button
                   onClick={() => setEditingId(null)}
-                  className='rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-700'>
+                  className='rounded-sm bg-gray-500 px-4 py-2 text-white hover:bg-gray-700'>
                   Отменить
                 </button>
               </div>

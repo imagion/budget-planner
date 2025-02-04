@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { AuthProvider } from '@/context/AuthContext';
@@ -20,7 +22,7 @@ export default function RootLayout({
     <html lang='en'>
       <body
         className={cn(
-          'min-h-screen bg-background text-foreground antialiased',
+          'bg-background text-foreground min-h-screen antialiased',
           montserrat.className,
         )}>
         <AuthProvider>{children}</AuthProvider>

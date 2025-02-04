@@ -50,7 +50,7 @@ export default function TransactionForm() {
     <div className='mx-auto w-full max-w-md p-4'>
       <h2 className='text-2xl font-bold'>Новая транзакция</h2>
       <form
-        className='mt-4 w-full max-w-md space-y-2 rounded bg-white p-6 shadow-md dark:bg-neutral-800'
+        className='mt-4 w-full max-w-md space-y-2 rounded-sm bg-white p-6 shadow-md dark:bg-neutral-800'
         onSubmit={handleSubmit}>
         {error && <p className='text-red-500'>{error}</p>}
         <input
@@ -58,33 +58,35 @@ export default function TransactionForm() {
           placeholder='Название'
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'
+          className='w-full rounded-sm'
+          required
         />
         <input
           type='number'
           placeholder='Сумма'
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'
+          className='w-full rounded-sm'
+          required
         />
         <select
           value={type}
           onChange={(e) => setType(e.target.value as 'income' | 'expense')}
-          className='w-full rounded border bg-white p-2 placeholder-neutral-300 focus:outline-none focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'>
+          className='w-full rounded-sm'>
           <option value='expense'>Расход</option>
           <option value='income'>Доход</option>
         </select>
         {response.isPending ? (
           <button
             type='submit'
-            className='w-full rounded bg-accent p-2 text-foreground hover:bg-neutral-600'
+            className='bg-accent text-foreground w-full rounded-sm p-2 hover:bg-neutral-600'
             disabled>
             Добавление...
           </button>
         ) : (
           <button
             type='submit'
-            className='w-full rounded bg-accent p-2 text-white hover:bg-blue-600'>
+            className='bg-accent w-full rounded-sm p-2 text-white hover:bg-blue-600'>
             Добавить транзакцию
           </button>
         )}

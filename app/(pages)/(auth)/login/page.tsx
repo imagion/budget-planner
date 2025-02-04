@@ -30,14 +30,14 @@ export default function Login() {
     <>
       <form
         onSubmit={handleLogin}
-        className='bg-component w-full max-w-md rounded p-6 shadow-md'>
+        className='w-full max-w-md rounded-sm bg-white p-6 shadow-md'>
         <h2 className='mb-4 text-2xl font-bold'>Вход</h2>
         <input
           type='email'
           placeholder='Email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className='mb-4 block w-full rounded border p-2'
+          className='mb-4 block w-full rounded-sm border p-2'
           required
         />
         <input
@@ -45,24 +45,24 @@ export default function Login() {
           placeholder='Пароль'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className='mb-4 block w-full rounded border p-2'
+          className='mb-4 block w-full rounded-sm border p-2'
           required
         />
         <button
           type='submit'
           disabled={isPending}
-          className='w-full rounded bg-blue-500 p-2 text-white disabled:opacity-50'>
+          className='w-full rounded-sm bg-blue-500 p-2 text-white disabled:opacity-50'>
           {isPending ? 'Входим...' : 'Войти'}
         </button>
         <button
           type='button'
           onClick={handleGoogleLogin}
-          className='mt-2 w-full rounded bg-red-500 p-2 text-white'>
+          className='mt-2 w-full rounded-sm bg-red-500 p-2 text-white'>
           Login with Google
         </button>
         {error && <p className='mt-2 text-red-500'>{error}</p>}
       </form>
-      <div className='bg-component mt-4 w-full max-w-md rounded p-6 text-center text-sm shadow-md'>
+      <div className='bg-component mt-4 w-full max-w-md rounded-sm p-6 text-center text-sm shadow-md'>
         Ещё нет аккаунта?{' '}
         <Link href='/signup' className='text-blue-500 hover:underline'>
           Зарегистрируйтесь
