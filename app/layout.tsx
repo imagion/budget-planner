@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
-import 'react-date-range/dist/styles.css';
-import 'react-date-range/dist/theme/default.css';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { AuthProvider } from '@/context/AuthContext';

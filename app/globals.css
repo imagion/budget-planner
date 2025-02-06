@@ -48,15 +48,18 @@ select {
 }
 
 /* calendar styles */
+/* main wrapper */
 .rdrCalendarWrapper {
-  @apply rounded-sm border dark:border-neutral-600! dark:bg-neutral-800!;
+  @apply rounded-sm border dark:border-neutral-600! dark:bg-neutral-800! dark:text-neutral-400;
 }
+/*  manual date inputs */
 .rdrDateDisplayWrapper {
   @apply dark:bg-neutral-700!;
 }
 .rdrDateDisplayItem {
   @apply dark:bg-neutral-800! dark:shadow-md!;
 }
+/* change month arrows */
 .rdrNextPrevButton {
   @apply dark:bg-neutral-700!;
 }
@@ -66,28 +69,43 @@ select {
 .rdrNextButton i {
   @apply dark:border-l-neutral-200!;
 }
+/* month and year selects */
 .rdrMonthPicker,
 .rdrYearPicker {
   select {
     @apply capitalize! dark:bg-neutral-700! dark:text-neutral-200!;
   }
 }
+/* Name of day */
 .rdrWeekDay {
   @apply capitalize! dark:text-neutral-400!;
 }
+/* date cells */
 .rdrDayNumber span {
-  @apply dark:text-gray-200!;
+  @apply dark:text-neutral-400!;
 }
 .rdrDayPassive .rdrDayNumber span {
-  @apply dark:text-gray-500!;
+  @apply dark:text-neutral-500!;
+}
+.rdrDayDisabled {
+  @apply dark:bg-neutral-900!;
+  & .rdrDayNumber span {
+    @apply dark:text-neutral-500!;
+  }
+}
+.rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
+  @apply dark:text-foreground!;
 }
 
-.rdrSelected,
+/* .rdrSelected,
 .rdrInRange,
 .rdrStartEdge,
 .rdrEndEdge {
   @apply dark:bg-accent! dark:text-white!;
-}
+} */
 
 @media (prefers-color-scheme: dark) {
   :root {

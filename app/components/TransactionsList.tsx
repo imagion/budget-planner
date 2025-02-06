@@ -6,8 +6,8 @@ import { useCollection } from '@/hooks/useCollection';
 import { useFirestore } from '@/hooks/useFirestore';
 import { cn } from '@/lib/utils';
 import { DateRange, RangeKeyDict } from 'react-date-range';
-// import 'react-date-range/dist/styles.css';
-// import 'react-date-range/dist/theme/default.css';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 import { ru } from 'date-fns/locale';
 import { Document } from '@/types/TransactionsListTypes';
 
@@ -113,13 +113,27 @@ export default function TransactionsList() {
             onClick={() => setShowDatePicker((prev) => !prev)}
             className='focus:ring-accent w-full rounded-sm border bg-white p-2 focus:ring-2 focus:outline-hidden dark:border-neutral-600 dark:bg-neutral-700'>
             {dateRange.startDate && dateRange.endDate
-              ? `${dateRange.startDate.toLocaleDateString()} - ${dateRange.endDate.toLocaleDateString()}`
+              ? `${dateRange.startDate.toLocaleDateString('ru-RU', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                })} - ${dateRange.endDate.toLocaleDateString('ru-RU', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                })}`
               : 'Выбрать диапазон дат'}
           </button>
           {showDatePicker && (
             <div className='mt-2 grid justify-center rounded-sm bg-white p-2 shadow-lg dark:bg-neutral-800'>
               <DateRange
-                editableDateInputs={true}
+                ranges={[
+                  {
+                    startDate: dateRange.startDate || new Date(),
+                    endDate: dateRange.endDate || new Date(),
+                    key: 'selection',
+                  },
+                ]}
                 onChange={(ranges: RangeKeyDict) => {
                   // Используем ключ 'selection' по умолчанию
                   const { startDate, endDate } = ranges.selection;
@@ -128,17 +142,13 @@ export default function TransactionsList() {
                     endDate: endDate || null,
                   });
                 }}
+                editableDateInputs={true}
                 locale={ru}
                 dateDisplayFormat='dd.MM.yyyy'
                 weekStartsOn={1}
                 moveRangeOnFirstSelection={false}
-                ranges={[
-                  {
-                    startDate: dateRange.startDate || new Date(),
-                    endDate: dateRange.endDate || new Date(),
-                    key: 'selection',
-                  },
-                ]}
+                rangeColors={['var(--accent)']}
+                maxDate={new Date()}
               />
               <button
                 onClick={() => setShowDatePicker(false)}
