@@ -88,13 +88,74 @@ export default function TransactionsList() {
   if (isLoading) return <p>Загрузка данных...</p>;
   if (error) return <p>Ошибка: {error}</p>;
 
-  console.log(data);
+  // Дополнительные статические диапазоны для выбора дат
+  const customStaticRanges = [
+    {
+      label: 'Сегодня',
+      range: () => ({
+        startDate: new Date(),
+        endDate: new Date(),
+      }),
+      isSelected(range: { startDate: Date; endDate: Date }) {
+        const today = new Date();
+        return (
+          range.startDate.toDateString() === today.toDateString() &&
+          range.endDate.toDateString() === today.toDateString()
+        );
+      },
+    },
+    {
+      label: 'Последние 7 дней',
+      range: () => {
+        const endDate = new Date();
+        const startDate = new Date();
+        startDate.setDate(endDate.getDate() - 6);
+        return { startDate, endDate };
+      },
+      isSelected(range: { startDate: Date; endDate: Date }) {
+        const { startDate, endDate } = range;
+        const today = new Date();
+        const last7Start = new Date();
+        last7Start.setDate(today.getDate() - 6);
+        return (
+          startDate.toDateString() === last7Start.toDateString() &&
+          endDate.toDateString() === today.toDateString()
+        );
+      },
+    },
+    {
+      label: 'Этот месяц',
+      range: () => {
+        const now = new Date();
+        const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        return { startDate, endDate };
+      },
+      isSelected(range: { startDate: Date; endDate: Date }) {
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        return (
+          range.startDate.toDateString() === startOfMonth.toDateString() &&
+          range.endDate.toDateString() === endOfMonth.toDateString()
+        );
+      },
+    },
+  ];
+
+  // Функция для обработки выбора предустановленного диапазона
+  const applyStaticRange = (
+    rangeFn: () => { startDate: Date; endDate: Date },
+  ) => {
+    const newRange = rangeFn();
+    setDateRange(newRange);
+  };
 
   return (
     <div className='mx-auto w-full max-w-md p-4 md:ml-auto'>
       <h2 className='text-2xl font-bold'>Список транзакций</h2>
       {/* Фильтры */}
-      <div className='mt-4'>
+      <div className='mt-4 space-y-2'>
         {/* Фильтр по типу */}
         <select
           value={filterType}
@@ -106,6 +167,17 @@ export default function TransactionsList() {
           <option value='income'>Доход</option>
           <option value='expense'>Расход</option>
         </select>
+        {/* Фильтр статических диапазонов */}
+        <div className='flex gap-2'>
+          {customStaticRanges.map((item) => (
+            <button
+              key={item.label}
+              onClick={() => applyStaticRange(item.range)}
+              className='rounded border bg-white p-2 text-sm focus:ring-2 focus:ring-accent dark:border-neutral-600 dark:bg-neutral-700'>
+              {item.label}
+            </button>
+          ))}
+        </div>
 
         {/* Выбор диапазона дат */}
         <div className='relative'>
