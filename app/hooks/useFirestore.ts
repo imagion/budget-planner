@@ -4,6 +4,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  DocumentReference,
   serverTimestamp,
   updateDoc,
 } from 'firebase/firestore';
@@ -65,7 +66,7 @@ export const useFirestore = <T>(collectionName: string) => {
 
   const CollectionRef = collection(db, collectionName);
 
-  const addDocument = async (doc: T) => {
+  const addDocument = async (doc: T): Promise<DocumentReference> => {
     dispatch({ type: 'IS_PENDING' });
 
     try {
@@ -76,10 +77,12 @@ export const useFirestore = <T>(collectionName: string) => {
       if (!isCancelled) {
         dispatch({ type: 'ADDED_DOCUMENT', payload: addedDocument as T });
       }
+      return addedDocument;
     } catch (error) {
       if (!isCancelled) {
         dispatch({ type: 'ERROR', payload: (error as Error).message });
       }
+      throw error;
     }
   };
 
