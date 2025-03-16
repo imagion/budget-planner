@@ -45,3 +45,5 @@ next-env.d.ts
 *.rules
 firebase-debug.log
 firestore.indexes.json
+
+.qodo

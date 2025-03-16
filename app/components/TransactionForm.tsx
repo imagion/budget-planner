@@ -6,17 +6,44 @@ import { useFirestore } from '@/hooks/useFirestore';
 import { TransactionType } from '@/types/TransactionFormTypes';
 import { cn } from '@/lib/utils';
 
+export const incomeCategories = [
+  { value: 'salary', label: 'Зарплата' },
+  { value: 'freelance', label: 'Фриланс' },
+  { value: 'investment', label: 'Инвестиции' },
+  { value: 'rental_income', label: 'Арендный доход' },
+  { value: 'gift', label: 'Подарки' },
+  { value: 'other', label: 'Другое' },
+];
+
+export const expenseCategories = [
+  { value: 'food', label: 'Еда и продукты' },
+  { value: 'housing', label: 'Жильё' },
+  { value: 'transportation', label: 'Транспорт' },
+  { value: 'utilities', label: 'Коммунальные услуги' },
+  { value: 'entertainment', label: 'Развлечения' },
+  { value: 'health', label: 'Здоровье' },
+  { value: 'education', label: 'Образование' },
+  { value: 'clothing', label: 'Одежда и обувь' },
+  { value: 'personal', label: 'Личные расходы' },
+  { value: 'other', label: 'Другое' },
+];
+
 export default function TransactionForm() {
   const [error, setError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<TransactionType>({
     mode: 'onBlur',
   });
+
+  const transactionType = watch('type');
+  const categories =
+    transactionType === 'income' ? incomeCategories : expenseCategories;
 
   const { addDocument, response } = useFirestore('transactions');
 
@@ -24,8 +51,7 @@ export default function TransactionForm() {
     setError(null);
     try {
       await addDocument(data);
-      // Сброс формы после успешного добавления
-      reset();
+      reset(); // Сброс формы после успешного добавления
     } catch (error) {
       setError(response.error || 'Произошла ошибка при добавлении транзакции');
     }
@@ -37,7 +63,6 @@ export default function TransactionForm() {
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='mt-4 w-full max-w-md rounded bg-white p-6 shadow-md dark:bg-neutral-800 space-y-4'>
-        {/* Глобальная ошибка от Firestore, если есть */}
         {error && <p className='text-red-500'>{error}</p>}
 
         {/* Поле "Название" */}
@@ -91,6 +116,27 @@ export default function TransactionForm() {
           </select>
           {errors.type && (
             <p className='mt-1 text-xs text-red-500'>{errors.type.message}</p>
+          )}
+        </div>
+
+        {/* Поле "Категория" */}
+        <div>
+          <select
+            {...register('category', { required: 'Выберите категорию.' })}
+            className={cn(
+              'w-full rounded-sm focus:ring-accent border-2 bg-neutral-50 p-2 placeholder-neutral-500 hover:bg-neutral-100 focus:ring-2 focus:outline-hidden disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 disabled:shadow-none dark:border-neutral-600 dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:disabled:border-gray-700 dark:disabled:bg-gray-800/20',
+            )}>
+            <option value=''>Выберите категорию...</option>
+            {categories.map((cat) => (
+              <option key={cat.value} value={cat.value}>
+                {cat.label}
+              </option>
+            ))}
+          </select>
+          {errors.category && (
+            <p className='mt-1 text-xs text-red-500'>
+              {errors.category.message}
+            </p>
           )}
         </div>
 
