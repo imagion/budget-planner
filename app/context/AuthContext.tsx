@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '@/lib/firebase';
 import {
   createUserWithEmailAndPassword,
@@ -18,28 +12,12 @@ import {
   updateProfile,
   User,
 } from 'firebase/auth';
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-type AuthContextType = {
-  user: User | null;
-  isPending: boolean;
-  error: string | null;
-  signup: (
-    email: string,
-    password: string,
-    displayName: string,
-  ) => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
-  logout: () => Promise<void>;
-};
+import { AuthContextType } from '@/types/AuthContextType';
+import { ChildrenProps } from '@/types/general';
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider = ({ children }: AuthProviderProps) => {
+export const AuthProvider = ({ children }: ChildrenProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isPending, setIsPending] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
