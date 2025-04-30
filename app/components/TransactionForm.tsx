@@ -4,7 +4,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useFirestore } from '@/hooks/useFirestore';
 import { TransactionType } from '@/types/TransactionFormTypes';
+import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
+import { User } from 'firebase/auth';
 
 export const incomeCategories = [
   { value: 'salary', label: 'Зарплата' },
@@ -30,6 +32,7 @@ export const expenseCategories = [
 
 export default function TransactionForm() {
   const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
 
   const {
     register,
@@ -50,7 +53,8 @@ export default function TransactionForm() {
   const onSubmit = async (data: TransactionType) => {
     setError(null);
     try {
-      await addDocument(data);
+      const docData = { ...data, uid: user!.uid };
+      await addDocument(docData);
       reset(); // Сброс формы после успешного добавления
     } catch (error) {
       setError(response.error || 'Произошла ошибка при добавлении транзакции');

@@ -8,9 +8,17 @@ export default function Header() {
 
   return (
     <header className='bg-accent flex items-center justify-between px-6 py-4 shadow-md'>
-      <Link href='/' className='text-2xl font-bold text-white'>
-        Budget Planner
-      </Link>
+      <div className='space-x-10'>
+        <Link href='/' className='text-2xl font-bold text-white'>
+          Budget Planner
+        </Link>
+        <Link href='/dashboard' className='text-md font-bold text-white'>
+          Графики
+        </Link>
+        <Link href='/transactions' className='text-md font-bold text-white'>
+          Транзакции
+        </Link>
+      </div>
 
       <nav className='flex items-center space-x-4'>
         {user ? (

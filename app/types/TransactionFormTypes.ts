@@ -3,4 +3,5 @@ export type TransactionType = {
   amount: number;
   type: 'income' | 'expense';
   category: string;
+  uid?: string;
 };

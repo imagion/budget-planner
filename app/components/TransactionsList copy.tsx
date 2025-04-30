@@ -31,16 +31,24 @@ export default function TransactionsList() {
   });
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  // Серверная фильтрация по uid текущего пользователя.
+  // Формирование условий фильтрации
   const getWhereConditions = (): [string, WhereFilterOp, unknown][] => {
     const conditions: [string, WhereFilterOp, unknown][] = [];
     if (user && user.uid) {
       conditions.push(['uid', '==', user.uid]);
     }
+    if (filterType !== 'all') {
+      conditions.push(['type', '==', filterType]);
+    }
+    if (dateRange.startDate) {
+      conditions.push(['createdAt', '>=', dateRange.startDate]);
+    }
+    if (dateRange.endDate) {
+      conditions.push(['createdAt', '<=', dateRange.endDate]);
+    }
     return conditions;
   };
 
-  // Получение транзакций текущего пользователя
   const { data, error, isLoading } = useCollection<Document>(
     'transactions',
     getWhereConditions(),
@@ -49,22 +57,6 @@ export default function TransactionsList() {
 
   const { updateDocument, deleteDocument } =
     useFirestore<Document>('transactions');
-
-  // Клиентская фильтрация для более глубокого контроля (по типу и дате)
-  const filteredData: Document[] | null = useMemo(() => {
-    if (!data) return null;
-
-    return data.filter((doc) => {
-      // Если createdAt отсутствует, возвращаем true для показа скелетона
-      if (!doc.createdAt) return true;
-      const docDate = new Date(doc.createdAt.seconds * 1000);
-      const matchesType = filterType === 'all' || doc.type === filterType;
-      const matchesDate =
-        (!dateRange.startDate || docDate >= dateRange.startDate) &&
-        (!dateRange.endDate || docDate <= dateRange.endDate);
-      return matchesType && matchesDate;
-    });
-  }, [filterType, dateRange, data]);
 
   // Редактирование и удаление транзакций
   const handleEdit = (id: string, doc: Document) => {
@@ -84,7 +76,27 @@ export default function TransactionsList() {
     await deleteDocument(id);
   };
 
-  // Предустановленные диапазоны для выбора дат
+  // Дополнительная клиентская фильтрация по дате
+  const filteredData: Document[] | null = useMemo(() => {
+    if (!data) return null;
+
+    return data.filter((doc) => {
+      // Если createdAt отсутствует, просто возвращаем true,
+      // чтобы отобразить скелетон вместо ошибки
+      if (!doc.createdAt) return true;
+      const docDate = new Date(doc.createdAt.seconds * 1000);
+      const matchesType = filterType === 'all' || doc.type === filterType;
+      const matchesDate =
+        (!dateRange.startDate || docDate >= dateRange.startDate) &&
+        (!dateRange.endDate || docDate <= dateRange.endDate);
+      return matchesType && matchesDate;
+    });
+  }, [filterType, dateRange, data]);
+
+  if (isLoading) return <p>Загрузка данных...</p>;
+  if (error) return <p>Ошибка: {error}</p>;
+
+  // Дополнительные статические диапазоны для выбора дат
   const customStaticRanges = [
     {
       label: 'Сегодня',
@@ -109,12 +121,13 @@ export default function TransactionsList() {
         return { startDate, endDate };
       },
       isSelected(range: { startDate: Date; endDate: Date }) {
+        const { startDate, endDate } = range;
         const today = new Date();
         const last7Start = new Date();
         last7Start.setDate(today.getDate() - 6);
         return (
-          range.startDate.toDateString() === last7Start.toDateString() &&
-          range.endDate.toDateString() === today.toDateString()
+          startDate.toDateString() === last7Start.toDateString() &&
+          endDate.toDateString() === today.toDateString()
         );
       },
     },
@@ -142,15 +155,13 @@ export default function TransactionsList() {
     },
   ];
 
+  // Функция для обработки выбора предустановленного диапазона
   const applyStaticRange = (
     rangeFn: () => { startDate: Date | null; endDate: Date | null },
   ) => {
     const newRange = rangeFn();
     setDateRange(newRange);
   };
-
-  if (isLoading) return <p>Загрузка данных...</p>;
-  if (error) return <p>Ошибка: {error}</p>;
 
   return (
     <div className='mx-auto w-full max-w-md p-4 md:ml-auto'>
@@ -208,6 +219,7 @@ export default function TransactionsList() {
                   },
                 ]}
                 onChange={(ranges: RangeKeyDict) => {
+                  // Используем ключ 'selection' по умолчанию
                   const { startDate, endDate } = ranges.selection;
                   setDateRange({
                     startDate: startDate || null,

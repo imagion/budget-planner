@@ -10,9 +10,9 @@ export default function AuthLayout({
 }) {
   return (
     <PublicRoute>
-      <div className='bg-background flex h-screen flex-col items-center justify-center'>
+      <main className='bg-background flex h-screen flex-col items-center justify-center'>
         {children}
-      </div>
+      </main>
     </PublicRoute>
   );
 }
