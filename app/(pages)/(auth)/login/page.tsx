@@ -15,14 +15,14 @@ export default function Login() {
     e.preventDefault();
     await login(email, password);
     if (!error) {
-      router.push('/');
+      router.push('/transactions');
     }
   };
 
   const handleGoogleLogin = async () => {
     await loginWithGoogle();
     if (!error) {
-      router.push('/');
+      router.push('/transactions');
     }
   };
 

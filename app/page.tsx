@@ -1,14 +1,18 @@
-import ProtectedRoute from '@/components/ProtectedRoute';
-import TransactionForm from '@/components/TransactionForm';
-import TransactionList from '@/components/TransactionsList';
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Home() {
-  return (
-    <ProtectedRoute>
-      <main className='container mx-auto mt-4 md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:justify-center'>
-        <TransactionList />
-        <TransactionForm />
-      </main>
-    </ProtectedRoute>
-  );
+  const { user, isPending } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isPending && user) {
+      router.push('/transactions');
+    }
+  }, [user, isPending]);
+
+  return null;
 }
