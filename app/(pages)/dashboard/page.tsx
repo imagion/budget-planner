@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import BudgetChart from '@/components/BudgetChart';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useCollection } from '../../hooks/useCollection';
 import { TransactionType } from '@/types/TransactionFormTypes';
 
@@ -22,23 +23,19 @@ export default function DashboardPage() {
     <div className='space-y-8'>
       <h1 className='text-2xl font-bold mb-4'>Дашборд</h1>
 
-      <div className='flex justify-center gap-4'>
-        {typeOptions.map((type) => (
-          <button
-            key={type}
-            onClick={() => setFilter(type)}
-            className={`px-4 py-2 rounded ${
-              filter === type
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-800'
-            }`}>
-            {type === 'all' ? 'Все' : type === 'income' ? 'Доходы' : 'Расходы'}
-          </button>
-        ))}
+      <Tabs
+        defaultValue='all'
+        onValueChange={(val) => setFilter(val as FilterType)}
+        className='w-full'>
+        <TabsList className='flex justify-center'>
+          <TabsTrigger value='all'>Все</TabsTrigger>
+          <TabsTrigger value='income'>Доходы</TabsTrigger>
+          <TabsTrigger value='expense'>Расходы</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
-        <div className='max-w-md mx-auto'>
-          <BudgetChart data={filteredData} />
-        </div>
+      <div className='max-w-md mx-auto'>
+        <BudgetChart data={filteredData} />
       </div>
     </div>
   );
