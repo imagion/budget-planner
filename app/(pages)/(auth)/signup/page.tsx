@@ -15,7 +15,7 @@ export default function Signup() {
     e.preventDefault();
     await signup(email, password, displayName);
     if (!error) {
-      router.push('/');
+      router.push('/transactions');
     }
   };
 
