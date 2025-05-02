@@ -1,18 +1,25 @@
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
+import { TransactionType } from '@/types/TransactionFormTypes';
 
 Chart.register(ArcElement, Tooltip, Legend);
 
-export default function BudgetChart({
-  data,
-}: {
-  data: { category: string; amount: number }[];
-}) {
+type CategoryData = {
+  [category: string]: number;
+};
+
+export default function BudgetChart({ data }: { data: TransactionType[] }) {
+  // Группируем транзакции по категориям
+  const grouped: CategoryData = {};
+  for (const item of data) {
+    grouped[item.category] = (grouped[item.category] || 0) + item.amount;
+  }
+
   const chartData = {
-    labels: data.map((item) => item.category),
+    labels: Object.keys(grouped),
     datasets: [
       {
-        data: data.map((item) => item.amount),
+        data: Object.values(grouped),
         backgroundColor: [
           '#FF6384',
           '#36A2EB',
