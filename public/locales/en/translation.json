@@ -1,0 +1,9 @@
+{
+  "dashboard": "Dashboard",
+  "transactions": "Transactions",
+  "category": {
+    "food": "Food",
+    "transport": "Transport",
+    "salary": "Salary"
+  }
+}

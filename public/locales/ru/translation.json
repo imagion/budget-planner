@@ -1,0 +1,9 @@
+{
+  "dashboard": "Дашборд",
+  "transactions": "Транзакции",
+  "category": {
+    "food": "Еда",
+    "transport": "Транспорт",
+    "salary": "Зарплата"
+  }
+}

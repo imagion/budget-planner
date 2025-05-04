@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
+import '@/lib/i18n';
 import { AuthProvider } from '@/context/AuthContext';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
@@ -17,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='ru'>
+    <html lang='en'>
       <body
         className={cn(
           'bg-background text-foreground min-h-screen antialiased',
